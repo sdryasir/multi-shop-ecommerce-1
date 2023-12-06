@@ -13,50 +13,37 @@ function AddCategory() {
     const {handleSubmit, handleChange, handleBlur, errors, values, touched, setFieldValue} = useFormik({
         initialValues: {
           title: '',
-          description: '',
-          category:'',
           image: '',
-          price:'',
-          discount:''
-
         },
         validationSchema: Yup.object({
             title: Yup.string().max(30, 'Must be 30 characters or less').required('Required'),
-            description: Yup.string().max(2000, 'Must be 2000 characters or less').required('Required'),
-            category: Yup.string().required('Required'),
             image: Yup.string(),
-            price: Yup.number().required('Required'),
-            discount: Yup.number().required('Required'),
         }),
         onSubmit: async (values) => {
-            const res = await addProduct(values).unwrap();
-            console.log(res)
-            if (res.success) {
-                toast.success(res.message);
-            } else {
-                toast.error(res.message);
-            }
+
+            console.log(values);
+            //const res = await addProduct(values).unwrap();
+            // console.log(res)
+            // if (res.success) {
+            //     toast.success(res.message);
+            // } else {
+            //     toast.error(res.message);
+            // }
         },
       });
     
   return (
     <>
-        <Breadcrumb/>
-
         <div className="container-fluid">
         <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4"><span className="bg-secondary pr-3">Add New Category</span></h2>
         <div className="row px-xl-5">
-            <div className="col-lg-7 mb-5">
+            <div className="col-lg-12 mb-5">
                 <div className="contact-form bg-light p-30">
                     <div id="success"></div>
                     <form name="addProduct" id="contactForm" onSubmit={handleSubmit}>
                         <div className="control-group">
-                            <input type="text" onChange={handleChange} onBlur={handleBlur} className="form-control" id="title" name='title' placeholder="Product Title"/>
+                            <input type="text" onChange={handleChange} onBlur={handleBlur} className="form-control" id="title" name='title' placeholder="Category Title"/>
                             <p className="help-block text-danger">{errors.title && touched.title ? errors.title : null}</p>
-                        </div>
-                        <div className="control-group">
-                            <textarea className="form-control" onChange={handleChange} onBlur={handleBlur} rows="8" id="description" name='description' placeholder="Description"></textarea>
-                            <p className="help-block text-danger">{errors.description && touched.description ? errors.description : null}</p>
                         </div>
                         
                         <div className="control-group">
@@ -74,19 +61,11 @@ function AddCategory() {
                             <p className="help-block text-danger">{errors.image && touched.image ? errors.image : null}</p>
                         </div>
                        
-                        
+                        <ToastContainer /> 
                         <div>
                             <button className="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Add Product</button>
                         </div>
                     </form>
-                </div>
-            </div>
-            <div className="col-lg-5 mb-5">
-                <div className="bg-light p-30 mb-30">
-                   
-                </div>
-                <div className="bg-light p-30 mb-3">
-                <ToastContainer />  
                 </div>
             </div>
         </div>

@@ -28,6 +28,7 @@ import Dashboard from './pages/Dashboard'
 
 
 
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -41,14 +42,13 @@ const router = createBrowserRouter(
       
       <Route element={<RequireAuth/>}>
         <Route path="checkout" element={<Checkout/>} />
-        <Route path="/user/dashboard" element={<Dashboard/>} />
+        <Route path="/user" element={<RequireAdminAuth role={'admin'}/>}>
+          <Route path='/user/dashboard' element={<Dashboard/>}>
+            <Route path="/user/dashboard/add-product" element={<AddProduct/>} />
+            <Route path="/user/dashboard/add-category" element={<AddCategory/>} />
+          </Route>
+        </Route>
       </Route>
-      
-      <Route element={<RequireAdminAuth role={'admin'}/>}>
-        <Route path="add-product" element={<AddProduct/>} />
-        <Route path="add-category" element={<AddCategory/>} />
-      </Route>
-
     </Route>
   )
 )

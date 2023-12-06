@@ -17,8 +17,8 @@ function SideNavigation() {
                         {
                             user.role && user.role === 'admin' ? 
                             <>
-                                <Link to={`/add-category`} class="list-group-item list-group-item-action">Add Category</Link>
-                                <Link to={`/add-product`} class="list-group-item list-group-item-action">Add Product</Link>
+                                <Link to={`/user/dashboard/add-category`} class="list-group-item list-group-item-action">Add Category</Link>
+                                <Link to={`/user/dashboard/add-product`} class="list-group-item list-group-item-action">Add Product</Link>
                             </>
                             :null
                         }

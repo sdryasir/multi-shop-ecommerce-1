@@ -11,7 +11,10 @@ function RequireAdminAuth({role}) {
     }
 
   return (
+
+    <>
     <Outlet/>
+    </>
   )
 }
 

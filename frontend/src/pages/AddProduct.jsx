@@ -41,12 +41,10 @@ function AddProduct() {
     
   return (
     <>
-        <Breadcrumb/>
-
         <div className="container-fluid">
         <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4"><span className="bg-secondary pr-3">Add New Product</span></h2>
         <div className="row px-xl-5">
-            <div className="col-lg-7 mb-5">
+            <div className="col-lg-12 mb-5">
                 <div className="contact-form bg-light p-30">
                     <div id="success"></div>
                     <form name="addProduct" id="contactForm" onSubmit={handleSubmit}>
@@ -88,19 +86,11 @@ function AddProduct() {
                             <input type="number"  onChange={handleChange} onBlur={handleBlur} name="discount" className="form-control" id="discount" placeholder="discount"/>
                             <p className="help-block text-danger">{errors.discount && touched.discount ? errors.discount : null}</p>
                         </div>
-                        
+                        <ToastContainer />  
                         <div>
                             <button className="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Add Product</button>
                         </div>
                     </form>
-                </div>
-            </div>
-            <div className="col-lg-5 mb-5">
-                <div className="bg-light p-30 mb-30">
-                   
-                </div>
-                <div className="bg-light p-30 mb-3">
-                <ToastContainer />  
                 </div>
             </div>
         </div>

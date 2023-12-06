@@ -11,7 +11,9 @@ function RequireAuth() {
     }
 
   return (
+    <>
     <Outlet/>
+    </>
   )
 }
 
