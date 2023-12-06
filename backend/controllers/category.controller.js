@@ -39,10 +39,10 @@ export const createNewCategory = async function(req, res, next){
             const filePath = path.resolve(imagePath);
             newCategory.image = filePath 
             fs.writeFileSync(filePath, imageData,  { encoding: 'base64' }) 
-            if(await Product.create(newCategory)){
+            if(await Category.create(newCategory)){
                 res.json({
                     success:true,
-                    message:"Product has been created"        
+                    message:"Category has been created"        
                 })
             }else{
                 return next(new Error("Something went wrong")); 

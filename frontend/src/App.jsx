@@ -42,6 +42,11 @@ const router = createBrowserRouter(
       
       <Route element={<RequireAuth/>}>
         <Route path="checkout" element={<Checkout/>} />
+
+        <Route path='/user/dashboard' element={<Dashboard/>}>
+          
+        </Route>
+
         <Route path="/user" element={<RequireAdminAuth role={'admin'}/>}>
           <Route path='/user/dashboard' element={<Dashboard/>}>
             <Route path="/user/dashboard/add-product" element={<AddProduct/>} />
@@ -74,8 +79,6 @@ function App() {
       return () => clearInterval(interval);
     }
   },[token])
-
-
 
   return (
     <>

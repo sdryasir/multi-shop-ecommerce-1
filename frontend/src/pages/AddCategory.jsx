@@ -4,11 +4,11 @@ import { useFormik } from 'formik';
  import * as Yup from 'yup';
  import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAddNewProductMutation } from '../redux/features/product/productApi'
+import { useAddNewCategoryMutation } from '../redux/features/category/categoryApi'
 
 function AddCategory() {
 
-    const [addProduct, { isLoading }] = useAddNewProductMutation();
+    const [addCategory, { isLoading }] = useAddNewCategoryMutation();
 
     const {handleSubmit, handleChange, handleBlur, errors, values, touched, setFieldValue} = useFormik({
         initialValues: {
@@ -22,13 +22,13 @@ function AddCategory() {
         onSubmit: async (values) => {
 
             console.log(values);
-            //const res = await addProduct(values).unwrap();
-            // console.log(res)
-            // if (res.success) {
-            //     toast.success(res.message);
-            // } else {
-            //     toast.error(res.message);
-            // }
+            const res = await addCategory(values).unwrap();
+            console.log(res)
+            if (res.success) {
+                toast.success(res.message);
+            } else {
+                toast.error(res.message);
+            }
         },
       });
     
@@ -63,7 +63,7 @@ function AddCategory() {
                        
                         <ToastContainer /> 
                         <div>
-                            <button className="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Add Product</button>
+                            <button className="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Save Category</button>
                         </div>
                     </form>
                 </div>
