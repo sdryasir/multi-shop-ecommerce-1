@@ -5,10 +5,12 @@ import { useFormik } from 'formik';
  import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAddNewProductMutation } from '../redux/features/product/productApi'
+import { useGetAllCategoriesQuery } from '../redux/features/category/categoryApi'
 
 function AddProduct() {
 
-    const [addProduct, { isLoading }] = useAddNewProductMutation();
+    const [addProduct] = useAddNewProductMutation();
+    const {isLoading, data, error} = useGetAllCategoriesQuery();
 
     const {handleSubmit, handleChange, handleBlur, errors, values, touched, setFieldValue} = useFormik({
         initialValues: {
@@ -30,7 +32,7 @@ function AddProduct() {
         }),
         onSubmit: async (values) => {
             const res = await addProduct(values).unwrap();
-            console.log(res)
+            console.log(values)
             if (res.success) {
                 toast.success(res.message);
             } else {
@@ -59,8 +61,13 @@ function AddProduct() {
                         <div className="control-group mb-3">
                             <select name="category" id="" className='form-control' onChange={handleChange} onBlur={handleBlur}>
                                 <option value="">Select Category</option>
-                                <option value="men fasion">Men fasion</option>
-                                <option value="watches">Watches</option>
+                                {
+                                    data && data.map(cat=>(
+                                        <option value={cat._id}>{cat.title}</option>
+                                    ))
+                                }
+
+                                
                             </select>
                             <p className="help-block text-danger">{errors.category && touched.category ? errors.category : null}</p>
                         </div>

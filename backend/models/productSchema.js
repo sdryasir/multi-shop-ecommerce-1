@@ -13,9 +13,6 @@ const productSchema = new Schema({
     description:{
         type:String
     },
-    category:{
-        type:String,
-    },
     price:{
         type:Number,
         required:[true, 'Please provide the price'],
@@ -38,6 +35,10 @@ const productSchema = new Schema({
             min:[1, 'min 1 is allowed'],
             max:[5, 'Max 5 is allowed']
         }
+    },
+    category:{
+        type:Schema.Types.ObjectId,
+        ref:'category'
     }
 })
 

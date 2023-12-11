@@ -4,7 +4,7 @@ const __dirname = path.resolve();
 import fs from 'fs';
 
 export const getAllCategories = async function(req, res, next){
-    const categories = await Category.find({});
+    const categories = await Category.find({}).populate('products');
     res.json(categories);
 }
 

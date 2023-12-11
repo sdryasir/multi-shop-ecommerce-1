@@ -12,6 +12,12 @@ const categorySchema = new Schema({
     image:{
         type:String
     },
+    products:[
+        {
+            type:Schema.Types.ObjectId,
+            ref:'product'
+        }
+    ]
 })
 
 
