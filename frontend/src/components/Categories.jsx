@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useGetAllCategoriesQuery } from '../redux/features/category/categoryApi';
 
 function Categories() {
 
+
     const { isLoading, data, error } = useGetAllCategoriesQuery();
+
+
     return (
         <>
             <div className="container-fluid pt-5">
