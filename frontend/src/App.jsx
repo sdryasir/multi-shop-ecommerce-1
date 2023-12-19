@@ -31,26 +31,26 @@ import Dashboard from './pages/Dashboard'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout/>}>
-      <Route path="/" element={<Home/>} />
+    <Route path="/" element={<RootLayout />}>
+      <Route path="/" element={<Home />} />
       <Route path="shop" element={<Shop />} />
-      <Route path="auth/login" element={<Login/>} />
-      <Route path="auth/register" element={<Register/>} />
-      <Route path="detail" element={<Detail/>} />
-      <Route path="cart" element={<Cart/>} /> 
-      <Route path="contact" element={<Contact/>} />
-      
-      <Route element={<RequireAuth/>}>
-        <Route path="checkout" element={<Checkout/>} />
+      <Route path="auth/login" element={<Login />} />
+      <Route path="auth/register" element={<Register />} />
+      <Route path="detail/:id" element={<Detail />} />
+      <Route path="cart" element={<Cart />} />
+      <Route path="contact" element={<Contact />} />
 
-        <Route path='/user/dashboard' element={<Dashboard/>}>
-          
+      <Route element={<RequireAuth />}>
+        <Route path="checkout" element={<Checkout />} />
+
+        <Route path='/user/dashboard' element={<Dashboard />}>
+
         </Route>
 
-        <Route path="/user" element={<RequireAdminAuth role={'admin'}/>}>
-          <Route path='/user/dashboard' element={<Dashboard/>}>
-            <Route path="/user/dashboard/add-product" element={<AddProduct/>} />
-            <Route path="/user/dashboard/add-category" element={<AddCategory/>} />
+        <Route path="/user" element={<RequireAdminAuth role={'admin'} />}>
+          <Route path='/user/dashboard' element={<Dashboard />}>
+            <Route path="/user/dashboard/add-product" element={<AddProduct />} />
+            <Route path="/user/dashboard/add-category" element={<AddCategory />} />
           </Route>
         </Route>
       </Route>
@@ -60,17 +60,17 @@ const router = createBrowserRouter(
 
 function App() {
 
-  const {user,token} = useSelector(state=>state.auth);
+  const { user, token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(token);
 
-    if(token){
-      const {exp} = jwtDecode(token);
+    if (token) {
+      const { exp } = jwtDecode(token);
       const checkTokenValidity = () => {
-        if(exp<Date.now()/1000){
+        if (exp < Date.now() / 1000) {
           alert("Your session has Expired, Please login again to continue using APP")
           dispatch(clearUserInfo());
         }
@@ -78,7 +78,7 @@ function App() {
       const interval = setInterval(checkTokenValidity, 3000);
       return () => clearInterval(interval);
     }
-  },[token])
+  }, [token])
 
   return (
     <>
