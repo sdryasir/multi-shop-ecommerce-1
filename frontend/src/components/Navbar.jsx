@@ -2,10 +2,11 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+
 function Navbar() {
 
 
-    const { token } = useSelector(state => state.auth);
+    const { cart } = useSelector(state => state);
 
     return (
         <>
@@ -54,7 +55,6 @@ function Navbar() {
                                     <div className="nav-item dropdown">
                                         <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i className="fa fa-angle-down mt-1"></i></a>
                                         <div className="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                            <Link to="/cart" className="dropdown-item">Shopping Cart</Link>
                                             <Link to="/checkout" className="dropdown-item">Checkout</Link>
                                         </div>
                                     </div>
@@ -66,10 +66,10 @@ function Navbar() {
                                         <i className="fas fa-heart text-primary"></i>
                                         <span className="badge text-secondary border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>0</span>
                                     </a>
-                                    <a href="" className="btn px-0 ml-3">
+                                    <Link to={'/cart'} className="btn px-0 ml-3">
                                         <i className="fas fa-shopping-cart text-primary"></i>
-                                        <span className="badge text-secondary border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>0</span>
-                                    </a>
+                                        <span className="badge text-secondary border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>{cart.cart && cart.cart.length}</span>
+                                    </Link>
                                 </div>
                             </div>
                         </nav>

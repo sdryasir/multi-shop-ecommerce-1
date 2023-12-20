@@ -2,12 +2,21 @@ import React from 'react'
 import Breadcrumb from '../components/Breadcrumb';
 import { useParams } from 'react-router-dom';
 import { useGetProductByIdQuery } from '../redux/features/product/productApi';
+import { addToCart } from '../redux/slices/cartSlice';
+import { useDispatch } from 'react-redux';
+
+
 
 
 function Detail() {
 
     const { id } = useParams();
     const { data, isLoading, error } = useGetProductByIdQuery(id);
+    const dispatch = useDispatch()
+
+    const handleCart = (product) => {
+        dispatch(addToCart(product));
+    }
 
 
     return (
@@ -86,8 +95,7 @@ function Detail() {
                                         </button>
                                     </div>
                                 </div>
-                                <button className="btn btn-primary px-3"><i className="fa fa-shopping-cart mr-1"></i> Add To
-                                    Cart</button>
+                                <button className="btn btn-primary px-3" onClick={() => handleCart(data)}><i className="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
                             </div>
                             <div className="d-flex pt-2">
                                 <strong className="text-dark mr-2">Share on:</strong>
