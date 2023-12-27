@@ -2,8 +2,8 @@ import React from 'react'
 import Breadcrumb from '../components/Breadcrumb';
 import { useParams } from 'react-router-dom';
 import { useGetProductByIdQuery } from '../redux/features/product/productApi';
-import { addToCart } from '../redux/slices/cartSlice';
-import { useDispatch } from 'react-redux';
+import { addToCart, decreaseQty, increaseQty } from '../redux/slices/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
@@ -12,11 +12,23 @@ function Detail() {
 
     const { id } = useParams();
     const { data, isLoading, error } = useGetProductByIdQuery(id);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+
+    const { cart } = useSelector(state => state.cart);
+
+    const itemExist = cart && cart.find(ci => ci._id === id);
 
     const handleCart = (product) => {
         dispatch(addToCart(product));
     }
+    const handleDecQuantity = (product) => {
+        dispatch(decreaseQty(product))
+    }
+    const handleIncQty = (product) => {
+        dispatch(increaseQty(product))
+    }
+
+
 
 
     return (
@@ -84,18 +96,22 @@ function Detail() {
                             <div className="d-flex align-items-center mb-4 pt-2">
                                 <div className="input-group quantity mr-3" style={{ width: '130px' }}>
                                     <div className="input-group-btn">
-                                        <button className="btn btn-primary btn-minus">
+                                        <button disabled={itemExist?.quantity <= 1 ? true : false} className="btn btn-primary btn-minus" onClick={() => handleDecQuantity(data)}>
                                             <i className="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" onChange={() => true} className="form-control bg-secondary border-0 text-center" value="1" />
+                                    <input type="text" onChange={() => true} className="form-control bg-secondary border-0 text-center" value={itemExist ? itemExist.quantity : '1'} />
                                     <div className="input-group-btn">
-                                        <button className="btn btn-primary btn-plus">
+                                        <button className="btn btn-primary btn-plus" onClick={() => handleIncQty(data)}>
                                             <i className="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
-                                <button className="btn btn-primary px-3" onClick={() => handleCart(data)}><i className="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                                {
+                                    itemExist ? < button className="btn btn-primary px-3" disabled><i className="fa fa-shopping-cart mr-1"></i> Already in Cart</button> :
+                                        <button className="btn btn-primary px-3" onClick={() => handleCart(data)}><i className="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                                }
+
                             </div>
                             <div className="d-flex pt-2">
                                 <strong className="text-dark mr-2">Share on:</strong>
@@ -190,7 +206,7 @@ function Detail() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
