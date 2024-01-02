@@ -1,16 +1,27 @@
 import React from 'react'
 import Breadcrumb from '../components/Breadcrumb';
 import { useSelector, useDispatch } from 'react-redux'
-import { removeFromCart } from '../redux/slices/cartSlice';
+import { removeFromCart, increaseQty, decreaseQty } from '../redux/slices/cartSlice';
+
 
 
 function Cart() {
-
-    const { cart } = useSelector(state => state);
+    let itemExist;
+    const { cart } = useSelector(state => state.cart);
 
     const dispatch = useDispatch()
     const handleRemove = (item) => {
         dispatch(removeFromCart(item));
+    }
+
+    const handleDecQuantity = (product) => {
+        itemExist = cart && cart.find(ci => ci._id === product._id);
+        console.log(itemExist);
+        dispatch(decreaseQty(product))
+    }
+    const handleIncQty = (product) => {
+        itemExist = cart && cart.find(ci => ci._id === product._id);
+        dispatch(increaseQty(itemExist))
     }
 
     return (
@@ -33,25 +44,25 @@ function Cart() {
 
 
                                 {
-                                    cart.cart && cart.cart.map(item => <tr>
+                                    cart && cart.map(item => <tr>
                                         <td className="align-middle"><img src={item.image} alt="" style={{ width: '50px' }} /> {item.title}</td>
                                         <td className="align-middle">Rs. {item.price}</td>
                                         <td className="align-middle">
                                             <div className="input-group quantity mx-auto" style={{ width: '100px' }}>
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-primary btn-minus" >
+                                                    <button className="btn btn-sm btn-primary btn-minus" disabled={item?.quantity <= 1 ? true : false} onClick={() => handleDecQuantity(item)}>
                                                         <i className="fa fa-minus"></i>
                                                     </button>
                                                 </div>
-                                                <input type="text" onChange={() => true} className="form-control form-control-sm bg-secondary border-0 text-center" value="1" />
+                                                <input type="text" onChange={() => true} className="form-control form-control-sm bg-secondary border-0 text-center" value={item ? item?.quantity : '1'} />
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-primary btn-plus">
+                                                    <button className="btn btn-sm btn-primary btn-plus" onClick={() => handleIncQty(item)}>
                                                         <i className="fa fa-plus"></i>
                                                     </button>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="align-middle">$150</td>
+                                        <td className="align-middle">${item?.quantity * item.price}</td>
                                         <td className="align-middle"><button className="btn btn-sm btn-danger" onClick={() => handleRemove(item)}><i className="fa fa-times"></i></button></td>
                                     </tr>)
                                 }

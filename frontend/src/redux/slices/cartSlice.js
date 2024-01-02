@@ -14,22 +14,12 @@ const cartSlice = createSlice({
         },
         removeFromCart(state, action) {
             const productToRemove = action.payload;
-            const existingProduct = state.cart.find(product => product._id === productToRemove._id);
-
-            if (existingProduct) {
-                if (existingProduct.quantity > 1) {
-                    existingProduct.quantity -= 1;
-                } else {
-
-                    state.cart = state.cart.filter(product => product._id !== productToRemove._id);
-                }
-            }
+            state.cart = state.cart.filter(product => product._id !== productToRemove._id);
         },
         emptyCart(state, action) {
             state.cart = action.payload;
         },
         increaseQty: (state, action) => {
-            console.log(action.payload._id);
             let itemFound = state.cart.find(item => item._id === action.payload._id);
             itemFound.quantity = itemFound.quantity + 1;
         },
