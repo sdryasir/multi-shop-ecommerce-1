@@ -2,6 +2,7 @@ import React from 'react'
 import Breadcrumb from '../components/Breadcrumb';
 import { useSelector, useDispatch } from 'react-redux'
 import { removeFromCart, increaseQty, decreaseQty } from '../redux/slices/cartSlice';
+import { Link } from 'react-router-dom';
 
 
 
@@ -16,12 +17,17 @@ function Cart() {
 
     const handleDecQuantity = (product) => {
         itemExist = cart && cart.find(ci => ci._id === product._id);
-        console.log(itemExist);
         dispatch(decreaseQty(product))
     }
     const handleIncQty = (product) => {
         itemExist = cart && cart.find(ci => ci._id === product._id);
         dispatch(increaseQty(itemExist))
+    }
+
+
+    let subTotal = 0;
+    for (let c in cart) {
+        subTotal += cart[c].price * cart[c].quantity;
     }
 
     return (
@@ -46,7 +52,7 @@ function Cart() {
                                 {
                                     cart && cart.map(item => <tr>
                                         <td className="align-middle"><img src={item.image} alt="" style={{ width: '50px' }} /> {item.title}</td>
-                                        <td className="align-middle">Rs. {item.price}</td>
+                                        <td className="align-middle">${item.price}</td>
                                         <td className="align-middle">
                                             <div className="input-group quantity mx-auto" style={{ width: '100px' }}>
                                                 <div className="input-group-btn">
@@ -83,19 +89,19 @@ function Cart() {
                             <div className="border-bottom pb-2">
                                 <div className="d-flex justify-content-between mb-3">
                                     <h6>Subtotal</h6>
-                                    <h6>$150</h6>
+                                    <h6>${subTotal}</h6>
                                 </div>
                                 <div className="d-flex justify-content-between">
                                     <h6 className="font-weight-medium">Shipping</h6>
-                                    <h6 className="font-weight-medium">$10</h6>
+                                    <h6 className="font-weight-medium">${Math.floor(subTotal * 0.01)}</h6>
                                 </div>
                             </div>
                             <div className="pt-2">
                                 <div className="d-flex justify-content-between mt-2">
                                     <h5>Total</h5>
-                                    <h5>$160</h5>
+                                    <h5>${subTotal + Math.floor(subTotal * 0.01)}</h5>
                                 </div>
-                                <button className="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
+                                <Link to={'/checkout'} className="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</Link>
                             </div>
                         </div>
                     </div>
