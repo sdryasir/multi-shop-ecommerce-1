@@ -25,6 +25,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { clearUserInfo } from './redux/features/auth/authSlice';
 import Dashboard from './pages/Dashboard'
+import Payment from './components/Payment'
 
 
 
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
 
       <Route element={<RequireAuth />}>
         <Route path="checkout" element={<Checkout />} />
+        <Route path="payment" element={<Payment />} />
 
         <Route path='/user/dashboard' element={<Dashboard />}>
 
