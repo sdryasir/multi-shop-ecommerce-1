@@ -31,9 +31,12 @@ function Payment() {
   return (
     <div>
         <Elements stripe={stripePromise}>
-            <CardNumberElement/>
-            <CardExpiryElement/>
-            <CardCvcElement/>
+        <form>
+            <CardNumberElement type="text" />
+            <CardExpiryElement type="text" />
+            <CardCvcElement type="text" />
+            <button type='submit'>Pay</button>
+        </form>
         </Elements>
     </div>
   )
