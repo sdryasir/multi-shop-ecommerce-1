@@ -4,7 +4,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const processPayment = async (req, res, next)=>{
 
-    console.log("Heelo payment");
     const amount = req.body.amount;
 
     const paymentIntent = await stripe.paymentIntents.create({
@@ -20,4 +19,11 @@ export const processPayment = async (req, res, next)=>{
     client_secret: paymentIntent
   })
 
+}
+
+export const sendStripeApi = async (req, res, next)=>{
+    
+  res.json({
+    stripe_api_key: process.env.STRIPE_SECRET_KEY
+  })
 }
