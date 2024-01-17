@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import {loadStripe} from '@stripe/stripe-js';
+
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios';
 import {
   PaymentElement,
   Elements,
@@ -9,35 +11,50 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import { useProcessPaymentMutation } from '../redux/features/payment/paymentApi';
 
 function Payment() {
-  const [apiSecret, setApiSecret] = useState('')
-  const getStripeApi = async ()=>{
-    await fetch('http://localhost:8000/api/stripeapikey')
-    .then(res=>res.json())
-    .then(data=>setApiSecret(data.stripe_api_key));
+  const stripe = useStripe();
+  const elements = useElements();
+  const { cart } = useSelector(state => state.cart);
+  const { user } = useSelector(state => state.auth);
+
+  const [processPayment,  {isLoading, error, data}] = useProcessPaymentMutation()
+  
+  let subTotal = 0;
+    for (let c in cart) {
+        subTotal += cart[c].price * cart[c].quantity;
   }
 
+  const handleSubmit = async (e)=>{
+    e.preventDefault();
+    try {
+      const res = await processPayment({amount:subTotal});
+      const client_secret = res.data.client_secret;
 
-  useEffect(()=>{
-    getStripeApi();
-  },[])
+      const result = await stripe.confirmCardPayment(client_secret.client_secret, {
+        payment_method:{
+          card:elements.getElement(CardNumberElement),
+          billing_details:{
+            name:user.fullNmae,
+            email:user.email
+          }
+        }
+      });
+      console.log("rrrrr", result.paymentIntent.status);
 
-  const stripePromise = loadStripe('pk_test_51JXUPNLs3WLhYCTdb6263j1MdZgKdGAIcneTvUokHLpJl4d5dsVdRQ5AxyIKdnAeI2vA8pPOddH5s5rFkZ2x78ZS008FJnKsVC');
-  const options = {
-    // passing the client secret obtained from the server
-    clientSecret: apiSecret,
-  };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
-    <div>
-        <Elements stripe={stripePromise}>
-        <form>
-            <CardNumberElement type="text" />
-            <CardExpiryElement type="text" />
-            <CardCvcElement type="text" />
-            <button type='submit'>Pay</button>
+    <div className='container'>
+        <form onSubmit={handleSubmit} className='w-50'>
+            <CardNumberElement type="text" className="form-control mb-3" />
+            <CardExpiryElement type="text" className="form-control mb-3"  />
+            <CardCvcElement type="text" className="form-control mb-3"  />
+            <button className='btn btn-primary' type='submit'>Pay Now</button>
         </form>
-        </Elements>
     </div>
   )
 }

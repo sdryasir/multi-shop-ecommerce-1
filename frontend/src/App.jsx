@@ -1,3 +1,4 @@
+import {Fragment} from 'react'
 import './App.css'
 import RequireAuth from './layouts/RequireAuth'
 import RootLayout from './layouts/Rootlayout'
@@ -19,15 +20,16 @@ import {
 } from "react-router-dom";
 import RequireAdminAuth from './layouts/RequireAdminAuth'
 import { jwtDecode } from "jwt-decode";
-
+import {   Elements } from '@stripe/react-stripe-js';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { clearUserInfo } from './redux/features/auth/authSlice';
 import Dashboard from './pages/Dashboard'
-import Payment from './components/Payment'
+import Payment from './components/Payment';
+import {loadStripe} from '@stripe/stripe-js';
 
-
+const stripeApiKey = loadStripe('pk_test_51JXUPNLs3WLhYCTdb6263j1MdZgKdGAIcneTvUokHLpJl4d5dsVdRQ5AxyIKdnAeI2vA8pPOddH5s5rFkZ2x78ZS008FJnKsVC');
 
 
 const router = createBrowserRouter(
@@ -43,8 +45,16 @@ const router = createBrowserRouter(
 
       <Route element={<RequireAuth />}>
         <Route path="checkout" element={<Checkout />} />
-        <Route path="payment" element={<Payment />} />
-
+          {stripeApiKey && (
+            <Route
+              path="/payment"
+              element={(
+                <Elements stripe={stripeApiKey}>
+                  <Payment />
+                </Elements>
+              )}
+            />
+          )}
         <Route path='/user/dashboard' element={<Dashboard />}>
 
         </Route>
@@ -67,8 +77,6 @@ function App() {
 
 
   useEffect(() => {
-    console.log(token);
-
     if (token) {
       const { exp } = jwtDecode(token);
       const checkTokenValidity = () => {
@@ -80,8 +88,7 @@ function App() {
       const interval = setInterval(checkTokenValidity, 3000);
       return () => clearInterval(interval);
     }
-  }, [token])
-
+  }, [token]);
   return (
     <>
       <RouterProvider router={router} />
